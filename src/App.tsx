@@ -6,7 +6,7 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <section className='h-screen bg-background flex items-center'>
         <div className='container'>
-          <h1 className='text-center font-bold text-primary text-pretty'>
+          <h1 className='text-center font-bold text-primary text-pretty text-3xl'>
             Event Manager
           </h1>
           <Table></Table>

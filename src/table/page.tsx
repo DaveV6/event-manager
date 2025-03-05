@@ -43,9 +43,9 @@ export default function Table() {
       <DataTable columns={columns} data={data} refreshData = {fetchData} />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button className="my-16">Add event</Button>
+          <Button className="my-4">Add event</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="border-border border bg-background">
           <DialogTitle>Add new event</DialogTitle>
           <CreateEventForm
             onEventCreated={() => {
