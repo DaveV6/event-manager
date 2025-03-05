@@ -10,6 +10,23 @@
     --text-large: 48px;
 }
 
+@utility container {
+    padding-inline: 10px;
+    margin-inline: auto;
+  
+    @variant sm {
+        padding-inline: 20px;
+    }
+  
+    @variant lg {
+        padding-inline: 40px;
+    }
+  
+    @variant xl {
+        padding-inline: 60px;
+    }
+  }
+
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
