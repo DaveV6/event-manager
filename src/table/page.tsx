@@ -45,7 +45,7 @@ export default function Table() {
         <DialogTrigger asChild>
           <Button className="my-4">Add event</Button>
         </DialogTrigger>
-        <DialogContent className="border-border border bg-background">
+        <DialogContent>
           <DialogTitle>Add new event</DialogTitle>
           <CreateEventForm
             onEventCreated={() => {
