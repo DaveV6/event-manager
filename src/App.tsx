@@ -1,18 +1,18 @@
-import './App.css'
-import Table from './table/page'
+import Table from './table/page';
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 function App() {
   return (
-    <>
-      <section className='h-screen bg-linear-to-r from-cyan-500 to-blue-500 flex items-center'>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <section className='h-screen bg-background flex items-center'>
         <div className='container'>
-          <h1 className='text-center font-bold'>
+          <h1 className='text-center font-bold text-primary text-pretty'>
             Event Manager
           </h1>
           <Table></Table>
         </div>
       </section>
-    </>
+    </ThemeProvider>
   )
 }
 
