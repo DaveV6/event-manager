@@ -17,7 +17,5 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLary": "lucide"
+  "iconLibrary": "lucide"
 }
-
-
