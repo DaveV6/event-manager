@@ -5,13 +5,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import { ArrowUpDown } from "lucide-react"
 import EditEventForm from "@/components/EditEventForm";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -34,7 +34,17 @@ export type Event = {
 export const columns: ColumnDef<Event>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "desc",
@@ -92,7 +102,6 @@ export const columns: ColumnDef<Event>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
                 Edit event
               </DropdownMenuItem>
@@ -116,7 +125,7 @@ export const columns: ColumnDef<Event>[] = [
 
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogContent>
-              <DialogTitle>Add new event</DialogTitle>
+              <DialogTitle>Edit event</DialogTitle>
               <EditEventForm
                 event={event}
                 onEventUpdated={() => {
