@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "seed": "npx tsx prisma/seed.ts"
+    "seed": "npx tsx prisma/seed.ts",
+    "server": "npx tsx src/server/index.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
