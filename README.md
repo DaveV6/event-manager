@@ -1,5 +1,5 @@
 # Event Manager App
-This is a simple app for managing your events created for a job interview
+This is a simple app for managing events. The app was created for a job interview.
 
 ## Prerequisites
 `node >= 18`
@@ -11,8 +11,14 @@ npm i
 npx prisma generate
 ```
 
-## Running the app
+## Running the client
 
 ```
 npm run dev
+```
+
+## Running the server
+
+```
+npm run server
 ```
