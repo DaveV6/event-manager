@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -126,7 +124,7 @@ export function DataTable<TData, TValue>({
           <DialogTrigger asChild>
             <Button className="my-4">Add event</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Add new event</DialogTitle>
             <CreateEventForm
               onEventCreated={() => {

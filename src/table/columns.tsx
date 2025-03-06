@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -124,7 +122,7 @@ export const columns: ColumnDef<Event>[] = [
           </Dialog>
 
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-            <DialogContent>
+            <DialogContent aria-describedby={undefined}>
               <DialogTitle>Edit event</DialogTitle>
               <EditEventForm
                 event={event}

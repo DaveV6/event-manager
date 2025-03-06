@@ -1,8 +1,6 @@
-"use client";
-
 import { Event, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 async function getData(): Promise<Event[]> {
   const response = await fetch("/api/events");
@@ -18,24 +16,29 @@ async function getData(): Promise<Event[]> {
 }
 
 export default function Table() {
-  const [data, setData] = useState<Event[]>([]);
-
-  const fetchData = async () => {
-    const events = await getData();
-    setData(events);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { 
+    data = [], 
+    isLoading, 
+    error, 
+    refetch 
+  } = useQuery({
+    queryKey: ["events"],
+    queryFn: getData,
+  });
 
   return (
     <div className="container py-5">
-      <DataTable 
-        columns={columns} 
-        data={data} 
-        refreshData={fetchData} 
-      />
+      {isLoading ? (
+        <div className="text-card-foreground text-center">Loading events...</div>
+      ) : error ? (
+        <div className="text-card-foreground text-center">Error loading events: {(error as Error).message}</div>
+      ) : (
+        <DataTable 
+          columns={columns} 
+          data={data} 
+          refreshData={() => refetch()} 
+        />
+      )}
     </div>
   );
 }
