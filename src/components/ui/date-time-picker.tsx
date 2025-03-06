@@ -12,24 +12,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 interface DateTimePickerProps {
   date: Date | undefined
   setDate: (date: Date | undefined) => void
-  label: string
 }
 
-export function DateTimePicker({ date, setDate, label }: DateTimePickerProps) {
+export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
   const [selectedTime, setSelectedTime] = useState<string>(
     date ? format(date, "HH:mm") : ""
   )
 
-  useEffect(() => {
-    if (date) {
-      setSelectedTime(format(date, "HH:mm"))
-    }
-  }, [])
+  useQuery({
+    queryKey: ["initialTime", date],
+    queryFn: () => {
+      if (date) {
+        return format(date, "HH:mm");
+      }
+      return "";
+    },
+    enabled: !!date,
+  });
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedTime(e.target.value)
@@ -64,7 +69,6 @@ export function DateTimePicker({ date, setDate, label }: DateTimePickerProps) {
 
   return (
     <div className="flex flex-col space-y-2">
-      <span className="text-sm font-medium text-card-foreground">{label}</span>
       <div className="grid grid-cols-2 gap-2">
         <Popover>
           <PopoverTrigger asChild>
