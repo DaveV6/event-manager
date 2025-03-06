@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <section className='h-screen bg-background flex items-center'>
+      <section className='bg-background flex items-center py-10 min-h-screen h-full'>
         <div className='container'>
           <h1 className='text-center font-bold text-primary text-pretty text-3xl'>
             Event Manager
