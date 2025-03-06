@@ -64,6 +64,11 @@
   * {
     font-family: 'Inter', sans-serif;
   }
+
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    @apply invert;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
