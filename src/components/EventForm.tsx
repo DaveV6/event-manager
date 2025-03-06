@@ -4,6 +4,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { useState, useEffect } from "react";
 
 export const eventSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -30,9 +33,17 @@ export default function EventForm({
   submitButtonText, 
   resetAfterSubmit = false 
 }: EventFormProps) {
+  const [fromDate, setFromDate] = useState<Date | undefined>(
+    defaultValues?.from ? new Date(defaultValues.from) : undefined
+  );
+  const [toDate, setToDate] = useState<Date | undefined>(
+    defaultValues?.to ? new Date(defaultValues.to) : undefined
+  );
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<EventFormValues>({
@@ -40,69 +51,76 @@ export default function EventForm({
     defaultValues: defaultValues,
   });
 
+  useEffect(() => {
+    if (fromDate) {
+      setValue("from", fromDate.toISOString());
+    }
+  }, [fromDate, setValue]);
+
+  useEffect(() => {
+    if (toDate) {
+      setValue("to", toDate.toISOString());
+    }
+  }, [toDate, setValue]);
+
   const handleFormSubmit: SubmitHandler<EventFormValues> = async (data) => {
     await onSubmit(data);
     if (resetAfterSubmit) {
       reset();
+      setFromDate(undefined);
+      setToDate(undefined);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-card-foreground">
+        <label htmlFor="name" className="block text-sm font-medium text-card-foreground pb-2">
           Name
         </label>
-        <input
+        <Input
           id="name"
           {...register("name")}
-          className="mt-1 block w-full rounded-md border-border border shadow-sm py-2 px-4 text-card-foreground"
         />
         {errors.name && (
-          <p className="text-sm text-red-500">{errors.name.message}</p>
+          <p className="text-sm text-red-500 pt-2">{errors.name.message}</p>
         )}
       </div>
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-card-foreground">
+        <label htmlFor="description" className="block text-sm font-medium text-card-foreground pb-2">
           Description
         </label>
-        <input
+        <Input
           id="description"
           {...register("desc")}
-          className="mt-1 block w-full rounded-md border-border border shadow-sm py-2 px-4 text-card-foreground"
         />
         {errors.desc && (
-          <p className="text-sm text-red-500">{errors.desc.message}</p>
+          <p className="text-sm text-red-500 pt-2">{errors.desc.message}</p>
         )}
       </div>
-      <div>
-        <label htmlFor="from" className="block text-sm font-medium text-card-foreground">
-          From
-        </label>
-        <input
-          type="datetime-local"
-          id="from"
-          {...register("from")}
-          className="mt-1 block w-full rounded-md border-border border shadow-sm py-2 px-4 text-card-foreground"
-        />
-        {errors.from && (
-          <p className="text-sm text-red-500">{errors.from.message}</p>
-        )}
-      </div>
-      <div>
-        <label htmlFor="to" className="block text-sm font-medium text-card-foreground">
-          To
-        </label>
-        <input
-          type="datetime-local"
-          id="to"
-          {...register("to")}
-          className="mt-1 block w-full rounded-md border-border border shadow-sm py-2 px-4 text-card-foreground"
-        />
-        {errors.to && (
-          <p className="text-sm text-red-500">{errors.to.message}</p>
-        )}
-      </div>
+      
+      {/* Hidden inputs to store the date values */}
+      <input type="hidden" {...register("from")} />
+      <input type="hidden" {...register("to")} />
+      
+      <DateTimePicker 
+        date={fromDate} 
+        setDate={setFromDate} 
+        label="From"
+      />
+      {errors.from && (
+        <p className="text-sm text-red-500 pb-2">{errors.from.message}</p>
+      )}
+      
+      <DateTimePicker 
+        date={toDate} 
+        setDate={setToDate} 
+        label="To"
+      />
+      {errors.to && (
+        <p className="text-sm text-red-500 pb-2">{errors.to.message}</p>
+      )}
+      
       <Button className="mt-2" type="submit">
         {submitButtonText}
       </Button>

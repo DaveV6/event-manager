@@ -17,7 +17,7 @@ export default function EditEventForm({ event, onEventUpdated }: EditEventFormPr
   const defaultValues: EventFormValues = {
     name: event.name,
     desc: event.desc,
-    from: new Date(event.from).toISOString().slice(0, 16), // Convert to local datetime string
+    from: new Date(event.from).toISOString().slice(0, 16),
     to: new Date(event.to).toISOString().slice(0, 16),
   };
 
