@@ -1,68 +1,69 @@
-import * as React from "react";
-import { Calendar as CalendarIcon, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
+import * as React from "react"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon, Clock } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+} from "@/components/ui/popover"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 interface DateTimePickerProps {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  date: Date | undefined
+  setDate: (date: Date | undefined) => void
 }
 
 export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
   const [selectedTime, setSelectedTime] = useState<string>(
-    date ? formatTime(date) : ""
-  );
+    date ? format(date, "HH:mm") : ""
+  )
 
   useQuery({
     queryKey: ["initialTime", date],
     queryFn: () => {
       if (date) {
-        return formatTime(date);
+        return format(date, "HH:mm")
       }
-      return "";
+      return ""
     },
     enabled: !!date,
-  });
+  })
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedTime(e.target.value);
-
+    setSelectedTime(e.target.value)
+    
     if (date && e.target.value) {
-      const [hours, minutes] = e.target.value.split(":");
-      const newDate = new Date(date);
-      newDate.setHours(parseInt(hours, 10));
-      newDate.setMinutes(parseInt(minutes, 10));
-      setDate(newDate);
+      const [hours, minutes] = e.target.value.split(":")
+      const newDate = new Date(date)
+      newDate.setHours(parseInt(hours, 10))
+      newDate.setMinutes(parseInt(minutes, 10))
+      setDate(newDate)
     }
-  };
+  }
 
   const handleDateSelect = (selected: Date | undefined) => {
     if (selected) {
-      const newDate = new Date(selected);
-
+      const newDate = new Date(selected)
+      
       if (date) {
-        newDate.setHours(date.getHours());
-        newDate.setMinutes(date.getMinutes());
+        newDate.setHours(date.getHours())
+        newDate.setMinutes(date.getMinutes())
       } else if (selectedTime) {
-        const [hours, minutes] = selectedTime.split(":");
-        newDate.setHours(parseInt(hours, 10));
-        newDate.setMinutes(parseInt(minutes, 10));
+        const [hours, minutes] = selectedTime.split(":")
+        newDate.setHours(parseInt(hours, 10))
+        newDate.setMinutes(parseInt(minutes, 10))
       }
-
-      setDate(newDate);
+      
+      setDate(newDate)
     } else {
-      setDate(undefined);
+      setDate(undefined)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col space-y-2">
@@ -77,7 +78,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? formatDate(date) : <span>Pick a date</span>}
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -85,11 +86,10 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              initialFocus
             />
           </PopoverContent>
         </Popover>
-
+        
         <div className="col-span-2 xl:col-span-1 relative flex items-center">
           <Clock className="absolute left-3 h-4 w-4 text-muted-foreground" />
           <Input
@@ -102,21 +102,5 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         </div>
       </div>
     </div>
-  );
-}
-
-// Helper function to format time as "HH:mm"
-function formatTime(date: Date): string {
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-}
-
-// Helper function to format date as "Month Day, Year"
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
+  )
 }
