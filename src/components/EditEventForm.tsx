@@ -1,6 +1,5 @@
-"use client";
-
 import EventForm, { EventFormValues } from "@/components/EventForm";
+import { updateEvent } from "@/services/eventService";
 
 interface EditEventFormProps {
   event: {
@@ -23,23 +22,7 @@ export default function EditEventForm({ event, onEventUpdated }: EditEventFormPr
 
   const handleSubmit = async (data: EventFormValues) => {
     try {
-      const response = await fetch(`/api/events/${event.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          desc: data.desc,
-          from: data.from,
-          to: data.to,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update event");
-      }
-
+      await updateEvent(event.id, data);
       onEventUpdated();
     } catch (error) {
       console.error("Error updating event:", error);
