@@ -1,5 +1,5 @@
-import Table from './table/page';
-import { ThemeProvider } from "@/components/ThemeProvider";
+import Table from './table/page'
+import { ThemeProvider } from "@/components/ThemeProvider"
 
 function App() {
   return (
