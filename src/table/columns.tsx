@@ -1,17 +1,18 @@
-import { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { useState } from "react"
+import { ColumnDef } from "@tanstack/react-table"
+import { MoreHorizontal } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { format } from "date-fns"
 import { ArrowUpDown } from "lucide-react"
-import EditEventForm from "@/components/EditEventForm";
+import { deleteEvent } from "@/services/eventService"
+import EditEventForm from "@/components/EditEventForm"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
 import {
   Dialog,
@@ -19,15 +20,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
 export type Event = {
-  id: number;
-  name: string;
-  desc?: string;
-  from: string;
-  to: string;
-};
+  id: number
+  name: string
+  desc?: string
+  from: string
+  to: string
+}
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -52,43 +53,37 @@ export const columns: ColumnDef<Event>[] = [
     accessorKey: "from",
     header: "From",
     cell: ({ row }) => {
-      const date = new Date(row.original.from);
-      return format(date, "dd/MM/yyyy, h:mm a");
+      const date = new Date(row.original.from)
+      return format(date, "dd/MM/yyyy, h:mm a")
     },
   },
   {
     accessorKey: "to",
     header: "To",
     cell: ({ row }) => {
-      const date = new Date(row.original.to);
-      return format(date, "dd/MM/yyyy, h:mm a");
+      const date = new Date(row.original.to)
+      return format(date, "dd/MM/yyyy, h:mm a")
     },
   },
   {
     id: "actions",
     cell: ({ row, table }) => {
-      const event = row.original;
-      const { refreshData } = table.options.meta;
-      const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-      const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+      const event = row.original
+      const { refreshData } = table.options.meta // Refresh the table data after an action
+      const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false) // State for delete dialog
+      const [isEditDialogOpen, setIsEditDialogOpen] = useState(false) // State for edit dialog
 
+      // Handle event deletion
       const handleDelete = async () => {
         try {
-          const response = await fetch(`/api/events/${event.id}`, {
-            method: "DELETE",
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to delete event");
-          }
-
-          refreshData();
+          await deleteEvent(event.id) // Call the deleteEvent service
+          refreshData() // Refresh the table data after deletion
         } catch (error) {
-          console.error("Error deleting event:", error);
+          console.error("Error deleting event:", error)
         } finally {
-          setIsDeleteDialogOpen(false);
+          setIsDeleteDialogOpen(false)
         }
-      };
+      }
 
       return (
         <>
@@ -127,14 +122,14 @@ export const columns: ColumnDef<Event>[] = [
               <EditEventForm
                 event={event}
                 onEventUpdated={() => {
-                  refreshData();
-                  setIsEditDialogOpen(false);
+                  refreshData()
+                  setIsEditDialogOpen(false)
                 }}
               />
             </DialogContent>
           </Dialog>
         </>
-      );
+      )
     },
   },
-];
+]

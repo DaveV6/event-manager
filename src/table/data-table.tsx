@@ -73,8 +73,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="grid grid-cols-12 py-4 items-end">
-        <div className="col-span-11 flex items-end gap-4">
+      <div className="grid grid-cols-12 py-4 items-end gap-8">
+        <div className="col-span-12 lg:col-span-10 flex items-end gap-4 flex-wrap md:flex-nowrap">
           <Input
             placeholder="Filter by name..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
           {dateRangeFilter && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 w-full">
               <div>
                 <div className="mb-2 font-medium text-card-foreground">From</div>
                 <DateTimePicker 
@@ -103,7 +103,7 @@ export function DataTable<TData, TValue>({
           )}
         </div>
         <Button 
-          className="col-span-1"
+          className="col-span-12 lg:col-span-2"
           onClick={() => {
             dateRangeFilter?.setFromDate(undefined)
             dateRangeFilter?.setToDate(undefined)
@@ -167,8 +167,8 @@ export function DataTable<TData, TValue>({
             <DialogTitle>Add new event</DialogTitle>
             <CreateEventForm
               onEventCreated={() => {
-                refreshData();
-                setIsDialogOpen(false);
+                refreshData()
+                setIsDialogOpen(false)
               }}
             />
           </DialogContent>

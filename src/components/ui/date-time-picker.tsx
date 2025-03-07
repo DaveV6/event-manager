@@ -27,12 +27,12 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     queryKey: ["initialTime", date],
     queryFn: () => {
       if (date) {
-        return format(date, "HH:mm");
+        return format(date, "HH:mm")
       }
-      return "";
+      return ""
     },
     enabled: !!date,
-  });
+  })
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedTime(e.target.value)
@@ -73,7 +73,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal text-card-foreground",
+                "col-span-2 xl:col-span-1 w-full justify-start text-left font-normal text-card-foreground",
                 !date && "text-muted-foreground"
               )}
             >
@@ -91,7 +91,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
           </PopoverContent>
         </Popover>
         
-        <div className="relative flex items-center">
+        <div className="col-span-2 xl:col-span-1 relative flex items-center">
           <Clock className="absolute left-3 h-4 w-4 text-muted-foreground" />
           <Input
             type="time"
