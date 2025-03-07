@@ -1,55 +1,70 @@
-import { EventFormValues } from "@/components/EventForm";
+import { EventFormValues } from "@/lib/schemas"
 
-/**
- * Create a new event
- */
-export const createEvent = async (data: EventFormValues): Promise<void> => {
-  try {
-    const response = await fetch("/api/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        desc: data.desc,
-        from: new Date(data.from).toISOString(),
-        to: new Date(data.to).toISOString(),
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create event");
-    }
-  } catch (error) {
-    console.error("Error creating event:", error);
-    throw error;
+// Fetch all events
+export const getEvents = async () => {
+  const response = await fetch("/api/events")
+  if (!response.ok) {
+    throw new Error("Failed to fetch data")
   }
-};
+  return response.json()
+}
 
-/**
- * Update an existing event
- */
-export const updateEvent = async (id: number, data: EventFormValues): Promise<void> => {
+// Create a new event
+export const createEvent = async (data: EventFormValues) => {
+  const response = await fetch("/api/events", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: data.name,
+      desc: data.desc,
+      from: new Date(data.from).toISOString(),
+      to: new Date(data.to).toISOString(),
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error("Failed to create event")
+  }
+
+  return response.json()
+}
+
+// Update an existing event by ID
+export const updateEvent = async (id: number, data: EventFormValues) => {
+  const response = await fetch(`/api/events/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: data.name,
+      desc: data.desc,
+      from: new Date(data.from).toISOString(),
+      to: new Date(data.to).toISOString(),
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error("Failed to update event")
+  }
+
+  return response.json()
+}
+
+// Delete an event by ID
+export const deleteEvent = async (id: number): Promise<void> => {
   try {
     const response = await fetch(`/api/events/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        desc: data.desc,
-        from: new Date(data.from).toISOString(),
-        to: new Date(data.to).toISOString(),
-      }),
-    });
+      method: "DELETE",
+    })
 
     if (!response.ok) {
-      throw new Error("Failed to update event");
+      throw new Error("Failed to delete event")
     }
   } catch (error) {
-    console.error("Error updating event:", error);
-    throw error;
+    console.error("Error deleting event:", error)
+    throw error
   }
-};
+}

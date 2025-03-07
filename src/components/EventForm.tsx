@@ -1,12 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-
 import {
   Form,
   FormControl,
@@ -16,17 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 
-export const eventSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  desc: z.string().optional(),
-  from: z.string().min(1, "Start date is required"),
-  to: z.string().min(1, "End date is required"),
-}).refine((data) => new Date(data.from) < new Date(data.to), {
-  message: "End date must be after start date",
-  path: ["to"],
-})
-
-export type EventFormValues = z.infer<typeof eventSchema>
+import { eventSchema, EventFormValues } from "@/lib/schemas"
 
 interface EventFormProps {
   defaultValues?: EventFormValues
@@ -41,18 +29,24 @@ export default function EventForm({
   submitButtonText, 
   resetAfterSubmit = false 
 }: EventFormProps) {
+  // State for the start date
   const [fromDate, setFromDate] = useState<Date | undefined>(
+    // If defaultValues has a from date, set it as the initial value else set it to undefined
     defaultValues?.from ? new Date(defaultValues.from) : undefined
   )
+  // State for the end date
   const [toDate, setToDate] = useState<Date | undefined>(
+    // If defaultValues has a to date, set it as the initial value else set it to undefined
     defaultValues?.to ? new Date(defaultValues.to) : undefined
   )
 
+  // Form hook
   const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
-    defaultValues: defaultValues,
+    resolver: zodResolver(eventSchema), // Use zod resolver for form validation
+    defaultValues: defaultValues, // Set default values for the form
   })
 
+  // Query to update the from date field when the fromDate state changes
   useQuery({
     queryKey: ["fromDate", fromDate],
     queryFn: () => {
@@ -64,6 +58,7 @@ export default function EventForm({
     enabled: !!fromDate,
   })
 
+  // Query to update the to date field when the toDate state changes
   useQuery({
     queryKey: ["toDate", toDate],
     queryFn: () => {
