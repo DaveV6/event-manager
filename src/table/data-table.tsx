@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import CreateEventForm from "@/components/CreateEventForm"
+import { DateTimePicker } from "@/components/ui/date-time-picker"
 
 import {
   ColumnDef,
@@ -36,12 +37,19 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   refreshData: () => void
+  dateRangeFilter?: {
+    fromDate: Date | undefined
+    toDate: Date | undefined
+    setFromDate: (date: Date | undefined) => void
+    setToDate: (date: Date | undefined) => void
+  }
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  refreshData
+  refreshData,
+  dateRangeFilter
 }: DataTableProps<TData, TValue>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -65,16 +73,47 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="grid grid-cols-12 py-4 items-end">
+        <div className="col-span-11 flex items-end gap-4">
+          <Input
+            placeholder="Filter by name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          {dateRangeFilter && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="mb-2 font-medium text-card-foreground">From</div>
+                <DateTimePicker 
+                  date={dateRangeFilter.fromDate} 
+                  setDate={dateRangeFilter.setFromDate} 
+                />
+              </div>
+              <div>
+                <div className="mb-2 font-medium text-card-foreground">To</div>
+                <DateTimePicker 
+                  date={dateRangeFilter.toDate} 
+                  setDate={dateRangeFilter.setToDate} 
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        <Button 
+          className="col-span-1"
+          onClick={() => {
+            dateRangeFilter?.setFromDate(undefined)
+            dateRangeFilter?.setToDate(undefined)
+            table.getColumn("name")?.setFilterValue("")
+          }}
+        >
+          Reset Filters
+        </Button>
       </div>
+
       <div className="rounded-md border border-border bg-card text-card-foreground shadow">
         <Table>
           <TableHeader>
