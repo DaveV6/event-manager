@@ -8,9 +8,8 @@ This is a simple app for managing events. The app was created for a job intervie
 
 ### Install dependencies
 ```
-npm i --legacy-peer-deps
+npm i
 ```
-Note: The reason for using `--legacy-peer-deps` is because of the library `react-day-picker` which breaks the shadcn calendar in the latest version
 
 ### Set up the database
 ```
