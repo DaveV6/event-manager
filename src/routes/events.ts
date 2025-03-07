@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client"
 import { eventSchema } from "@/lib/schemas"
 import { z } from "zod"
 import { ValidationError, DatabaseError } from "../errors/customErrors"
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
 
 const router = express.Router()
 const prisma = new PrismaClient()
