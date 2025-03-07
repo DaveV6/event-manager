@@ -9,14 +9,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
-    id Int @id @default(autoincrement())
-    name String
-    desc String?
-    from DateTime
-    to DateTime
+  id    Int      @id @default(autoincrement())
+  name  String   @db.VarChar(255)
+  desc  String?  @db.Text
+  from  DateTime
+  to    DateTime
 }
