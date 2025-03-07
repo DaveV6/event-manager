@@ -55,8 +55,8 @@ export default function Table() {
   const data = filteredEventsQuery.data || [] // Data is the filtered events
   const formattedData = data.map(event => ({
     ...event,
-    from: new Date(event.from).toLocaleString(),
-    to: new Date(event.to).toLocaleString(),
+    from: new Date(event.from).toISOString(),
+    to: new Date(event.to).toISOString(),
   }))
 
   return (
